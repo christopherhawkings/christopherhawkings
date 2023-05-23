@@ -1,12 +1,26 @@
-- 👋 Hi, I’m @chris, a beginner to programming 
-- 👀 I’m interested in python programming 
-- 🌱 I’m currently learning artificial intelligence, because it has become a necessity for our daily life.
-- 💞️ I’m looking to collaborate on my chatbot project 
-- 📫 Everybody do mistakes 🙂. So do I as a beginner. Let's watch where it 😃goes
-- 🙏Thanks for reading it and trying to support my lonely journey as a beginner in programming 
--
+from flask import Flask, request
 
-<!---
-christopherhawkings/christopherhawkings is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
+# Import the necessary ChatterBot classes
+from chatterbot import ChatBot
+from chatterbot.trainers import ChatterBotCorpusTrainer
+
+# Create a Flask app
+app = Flask(__name__)
+
+# Create a chatbot instance
+chatbot = ChatBot('My Chatbot')
+trainer = ChatterBotCorpusTrainer(chatbot)
+
+# Train the chatbot
+trainer.train('chatterbot.corpus.english')
+
+# Define the chatbot endpoint
+@app.route('/chat', methods=['POST'])
+def chat():
+    user_input = request.form['user_input']
+    response = chatbot.get_response(user_input)
+    return str(response)
+
+# Run the Flask app
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
